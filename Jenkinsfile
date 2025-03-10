@@ -6,7 +6,7 @@ pipeline{
         stage("Build"){
             when{
                 anyOf{
-                    branch 'featue'
+                    branch 'feature'
                     branch 'dev'
                     branch 'stage'
                 }
