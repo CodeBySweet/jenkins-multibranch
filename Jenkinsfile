@@ -42,11 +42,11 @@ pipeline{
             // }
             when{
                 expression{
-                    env.BRANCH_NAME == 'main' && params.DEPLOY
+                    env.BRANCH_NAME == 'main' || params.DEPLOY
                 }
             }
             steps{
-                echo "deploying"
+                echo "deploying 2"
             }
         }
     }
