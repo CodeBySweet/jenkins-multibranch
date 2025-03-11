@@ -2,13 +2,16 @@ pipeline{
 
     agent any
 
+    parameters{
+        booleanParam(name: 'DEPLOY', description: 'Is deploying:', defaultValue: false)
+    }
+
     stages{
         stage("Build"){
             when{
                 anyOf{
                     branch 'feature'
                     branch 'dev'
-                    branch 'stage'
                 }
             }
             steps{
@@ -17,19 +20,30 @@ pipeline{
         }
 
         stage("Test"){
-            when{
-                not{
-                    branch 'main'
-                }
-            }
+            // when{
+            //     not{
+            //         branch 'main'
+            //     }
+            
             steps{
-                echo "testing"
+                script{
+                    if(env.BRANCH_NAME != 'main'){
+                        echo "tetsing, the branch name is ${BRANCH_NAME}"
+                    }else{
+                        echo 'Testing is not allowed in main'
+                    }
+                }
             }
         }
 
         stage("Deploy"){
+            // when{
+            //     branch 'main'
+            // }
             when{
-                branch 'main'
+                expression{
+                    env.BRANCH_NAME == 'main' && params.DEPLOY
+                }
             }
             steps{
                 echo "deploying"
